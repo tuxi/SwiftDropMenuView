@@ -46,18 +46,77 @@
 
 @end
 
-@interface XYDropMenuView() <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate>
+@interface XYDropMenuViewBgView : UIControl
 
-// 下拉列表
-@property (nonatomic, strong) UICollectionView *collectionView;
-@property (nonatomic, strong) UIView *floatView;
-@property (nonatomic, strong) UIView *coverView;
-// 下拉动画时间 default: 0.25
-@property(nonatomic,assign) CGFloat animateTime;
+@property (nonatomic, strong) UIView *contentView;
+@property (nonatomic, weak) UIControl *coverView;
+@property (nonatomic, weak) NSLayoutConstraint *contentViewTop;
+@property (nonatomic, weak) NSLayoutConstraint *contentViewHeight;
+@property (nonatomic, weak) NSLayoutConstraint *coverViewTop;
+
 @end
 
-@implementation XYDropMenuView
+@implementation XYDropMenuViewBgView
+
+- (instancetype)initWithFrame:(CGRect)frame
 {
+    self = [super initWithFrame:frame];
+    if (self) {
+        
+        UIView *coverView = [UIView new];
+        coverView.userInteractionEnabled = NO;
+        coverView.translatesAutoresizingMaskIntoConstraints = NO;
+        coverView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
+        [self addSubview:coverView];
+        NSLayoutConstraint *coverViewTop = [coverView.topAnchor constraintEqualToAnchor:self.topAnchor constant:0];
+        coverViewTop.active = true;
+        self.coverViewTop = coverViewTop;
+        
+        [coverView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:0].active = YES;
+        [coverView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:0].active = YES;
+        [coverView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:0].active = YES;
+        
+        _contentView = [[UIView alloc] initWithFrame:self.bounds];
+        _contentView.layer.masksToBounds = YES;
+        [self addSubview:_contentView];
+        
+        _contentView.translatesAutoresizingMaskIntoConstraints = NO;
+        [_contentView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor].active = YES;
+        [_contentView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor].active = YES;
+        NSLayoutConstraint *top = [_contentView.topAnchor constraintEqualToAnchor:self.topAnchor];
+        top.active = YES;
+        self.contentViewTop = top;
+        NSLayoutConstraint *contentHeight = [self.contentView.heightAnchor constraintEqualToConstant:0.0];
+        contentHeight.active = YES;
+        self.contentViewHeight = contentHeight;
+        
+        self.backgroundColor = [UIColor clearColor];
+        
+    }
+    return self;
+}
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    UIView *touchView = [super hitTest:point withEvent:event];
+    return touchView;
+}
+
+@end
+
+@interface XYDropMenuView() <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate>
+
+@property (nonatomic, strong) UICollectionView *collectionView;  // 下拉列表
+
+
+@property (nonatomic, strong) XYDropMenuViewBgView *bgView;
+
+// 下拉动画时间 default: 0.25
+@property (nonatomic,assign) CGFloat animateTime;
+@property (nonatomic, weak) NSLayoutConstraint *collectionViewTop;
+
+@end
+
+@implementation XYDropMenuView {
     CGFloat _listHeight;
     BOOL _isOpened;
 }
@@ -66,7 +125,6 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self commonInit];
-        [self updateFrame:self.frame];
     }
     return self;
 }
@@ -74,28 +132,16 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     [self commonInit];
-    [self updateFrame:self.frame];
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    if (_isOpened) return;
-    
-    [self updateFrame:self.frame];
-}
 
 #pragma mark - Init
 - (void)commonInit {
     self.layer.masksToBounds = YES;
     
-    _floatView = [[UIView alloc] initWithFrame:self.bounds];
-    _floatView.layer.masksToBounds = YES;
-    [self addSubview:_floatView];
-    
-    
     // 主按钮 显示在界面上的点击按钮
     [self addTarget:self action:@selector(clickMainBtn:) forControlEvents:UIControlEventTouchUpInside];
-
+    
     // 下拉列表TableView
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
@@ -103,45 +149,41 @@
     _collectionView.delegate       = self;
     _collectionView.dataSource     = self;
     _collectionView.scrollEnabled  = NO;
-    _collectionView.backgroundColor = [UIColor clearColor];
-    [_floatView addSubview:_collectionView];
+    _collectionView.backgroundColor = [UIColor whiteColor];
+    [self.bgView.contentView addSubview:_collectionView];
     
     [_collectionView registerClass:[XYDropMenuDefaultCell class] forCellWithReuseIdentifier:@"XYDropMenuDefaultCell"];
+    
+    _collectionView.translatesAutoresizingMaskIntoConstraints = NO;
+    [_collectionView.leadingAnchor constraintEqualToAnchor:self.bgView.contentView.leadingAnchor].active = YES;
+    [_collectionView.trailingAnchor constraintEqualToAnchor:self.bgView.contentView.trailingAnchor].active = YES;
+    NSLayoutConstraint *collectionViewTop = [_collectionView.topAnchor constraintEqualToAnchor:self.bgView.contentView.topAnchor];
+    collectionViewTop.active = YES;
+    self.collectionViewTop = collectionViewTop;
+    [_collectionView.heightAnchor constraintEqualToAnchor:self.bgView.contentView.heightAnchor].active = YES;
     
     _animateTime = 0.25f;
     _isOpened = NO;
 }
 
-
-- (void)updateFrame:(CGRect)frame {
-    CGFloat width  = frame.size.width;
-    CGFloat height = frame.size.height;
-    [_floatView setFrame:CGRectMake(0, height, width, height)];
-    [_collectionView setFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, _collectionView.frame.size.height)];
-}
-
-
-#pragma mark - Set Methods
-- (void)setFrame:(CGRect)frame {
-    [super setFrame:frame];
-    [self updateFrame:frame];
-}
-
-
+//- (void)layoutSubviews {
+//    [super layoutSubviews];
+//    if (_isOpened) {
+//        return;
+//    }
+//
+//    CGPoint newPosition = [self getScreenPosition];
+//    self.bgView.contentViewTop.constant = newPosition.y + self.frame.size.height;
+//}
 
 #pragma mark - Get Methods
-- (UIView *)coverView {
-    if (_coverView == nil) {
-        UIWindow *window = [self getCurrentKeyWindow];
-        _coverView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, window.bounds.size.width, window.bounds.size.height)];
-        _coverView.backgroundColor = [UIColor clearColor];
-        [window addSubview:_coverView];
-        
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hide)];
-        tap.delegate = self;
-        [_coverView addGestureRecognizer:tap];
+- (XYDropMenuViewBgView *)bgView {
+    if (_bgView == nil) {
+        _bgView = [[XYDropMenuViewBgView alloc] init];
+        [_bgView addTarget:self action:@selector(tapOnBgView) forControlEvents:UIControlEventTouchUpInside];
+        _bgView.hidden = YES;
     }
-    return _coverView;
+    return _bgView;
 }
 
 
@@ -150,9 +192,10 @@
     [self.collectionView reloadData];
 }
 - (void)clickMainBtn:(UIButton *)button{
-    if(button.selected == NO) {
+    if (!_isOpened) {
         [self show];
-    }else {
+    }
+    else {
         [self hide];
     }
 }
@@ -166,15 +209,19 @@
     return totalLines;
 }
 
-- (void)show {   /* 显示下拉列表 */
+- (void)show {
     _isOpened = YES;
-    // 变更menu图层
     CGPoint newPosition = [self getScreenPosition];
-    _floatView.frame = CGRectMake(0, newPosition.y + self.frame.size.height, UIScreen.mainScreen.bounds.size.width, _floatView.bounds.size.height);
-    _floatView.layer.borderColor  = self.layer.borderColor;
-    _floatView.layer.borderWidth  = self.layer.borderWidth;
-    _floatView.layer.cornerRadius = self.layer.cornerRadius;
-    [self.coverView addSubview:_floatView];
+    self.bgView.contentViewTop.constant = newPosition.y + self.frame.size.height;
+    
+    self.bgView.contentView.layer.borderColor  = self.layer.borderColor;
+    self.bgView.contentView.layer.borderWidth  = self.layer.borderWidth;
+    self.bgView.contentView.layer.cornerRadius = self.layer.cornerRadius;
+    self.bgView.coverViewTop.constant = newPosition.y + self.frame.size.height;
+    
+    UIWindow *window = [self getCurrentKeyWindow];
+    [window addSubview:_bgView];
+    _bgView.frame = window.bounds;
     
     // call delegate
     if ([self.delegate respondsToSelector:@selector(dropMenuViewWillShow:)]) {
@@ -187,7 +234,7 @@
     // 菜单高度计算
     // 计算行数
     NSInteger totalLines = [self totalLines];
-    _listHeight = [self.dataSource heightForLineInDropMenuView:self] * totalLines;
+    _listHeight = [self heightForLine] * totalLines;
     UIEdgeInsets insets = [self collectionView:self.collectionView layout:(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout insetForSectionAtIndex:0];
     _listHeight += insets.top + insets.bottom;
     
@@ -195,16 +242,17 @@
     CGFloat padding = [self collectionView:self.collectionView layout:(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout minimumLineSpacingForSectionAtIndex:0];
     _listHeight += (totalLines - 1) * padding;
     
+    
+    self.bgView.contentViewHeight.constant = _listHeight;
+    [self.bgView layoutIfNeeded];
+    self.bgView.hidden = NO;
+    
     // 执行展开动画
-    __weak typeof(self) weakSelf = self;
+    self.collectionViewTop.constant = 0.0;
+    
     [UIView animateWithDuration:self.animateTime animations:^{
-        UIView *floatView     = weakSelf.floatView;
-        UIView *listView = weakSelf.collectionView;
-        
-        floatView.frame = CGRectMake(floatView.frame.origin.x, floatView.frame.origin.y, floatView.frame.size.width, self->_listHeight);
-        listView.frame = CGRectMake(listView.frame.origin.x, listView.frame.origin.y, UIScreen.mainScreen.bounds.size.width, self->_listHeight);
-        
-    }completion:^(BOOL finished) {
+        [self.bgView layoutIfNeeded];
+    } completion:^(BOOL finished) {
         if ([self.delegate respondsToSelector:@selector(dropMenuViewDidShow:)]) {
             [self.delegate dropMenuViewDidShow:self]; // 已经显示回调代理
         }
@@ -212,28 +260,21 @@
     
 }
 
+- (void)tapOnBgView {
+    [self hide];
+}
 
-- (void)hide{  // 隐藏下拉列表
-    // call delegate
+- (void)hide {
     if ([self.delegate respondsToSelector:@selector(dropMenuViewWillHidden:)]) {
         [self.delegate dropMenuViewWillHidden:self]; // 将要隐藏回调代理
     }
 
     // 执行关闭动画
-    __weak typeof(self) weakSelf = self;
+    self.collectionViewTop.constant = -self.bgView.contentView.frame.size.height;
     [UIView animateWithDuration:self.animateTime animations:^{
-        UIView *floatView = weakSelf.floatView;
-        weakSelf.floatView.frame  = CGRectMake(floatView.frame.origin.x, floatView.frame.origin.y, floatView.frame.size.width, 0);
-        
-    }completion:^(BOOL finished) {
-        weakSelf.collectionView.frame = CGRectMake(weakSelf.collectionView.frame.origin.x, weakSelf.collectionView.frame.origin.y, weakSelf.frame.size.width, 0);
-        
-        // 变更menu图层
-        weakSelf.floatView.frame = weakSelf.floatView.frame;
-        [self addSubview:weakSelf.floatView];
-        [weakSelf.coverView removeFromSuperview];
-        weakSelf.coverView = nil;
-        
+        [self.bgView layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        self.bgView.hidden = YES;
         self->_isOpened = NO;
         
         if ([self.delegate respondsToSelector:@selector(dropMenuViewDidHidden:)]) {
@@ -263,7 +304,6 @@
     if (foundIndex != NSNotFound) {
         return application.windows[foundIndex];
     }
-//    return nil;
     return [UIApplication sharedApplication].keyWindow;
 }
 
@@ -276,6 +316,13 @@
         return 1;
     }
     return numberOfOnline;
+}
+
+- (CGFloat)heightForLine {
+    if (![self.dataSource respondsToSelector:@selector(heightForLineInDropMenuView:)]) {
+        return  30.0;
+    }
+    return  [self.dataSource heightForLineInDropMenuView:self];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -313,7 +360,7 @@
     NSInteger padding = [self collectionView:collectionView layout:collectionViewLayout minimumInteritemSpacingForSectionAtIndex:indexPath.section];
     CGFloat itemWidth = floor(((collectionView.frame.size.width - insets.left - insets.right) - (numberOfOnline - 1) * padding) / numberOfOnline);
     
-    return CGSizeMake(itemWidth, [self.dataSource heightForLineInDropMenuView:self]);
+    return CGSizeMake(itemWidth, [self heightForLine]);
 }
 
 
@@ -342,15 +389,6 @@
     });
 }
 
-
-#pragma mark - UIGestureRecognizerDelegate
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-   if ([touch.view isKindOfClass:[XYDropMenuDefaultCell class]] ||
-       [touch.view.superview isKindOfClass:[XYDropMenuDefaultCell class]]) {
-       return NO;
-   }
-   return  YES;
-}
 
 @end
 

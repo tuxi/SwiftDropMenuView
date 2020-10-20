@@ -25,6 +25,14 @@ class ViewController: UIViewController {
         self.menuView.delegate = self
         self.menuView.dataSource = self
         
+        let btn = UIButton(frame: CGRect(x: 0, y: 100.0, width: 60, height: 30))
+        btn.setTitle("点我", for: .normal)
+        btn.setTitleColor(.white, for: .normal)
+        btn.contentEdgeInsets = UIEdgeInsets(top: 30, left: 30, bottom: 30, right: 30 )
+        btn.backgroundColor = .orange
+        btn.addTarget(self, action: #selector(btnClick), for: .touchUpInside)
+        self.view.addSubview(btn)
+        
         self.menuView.backgroundColor = UIColor.orange
         
         self.menuView.translatesAutoresizingMaskIntoConstraints = false
@@ -35,6 +43,11 @@ class ViewController: UIViewController {
         self.menuView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.6).isActive = true
         
     }
+    
+    @objc private func btnClick() {
+        print("点几了点哦")
+    }
+    
 
 }
 

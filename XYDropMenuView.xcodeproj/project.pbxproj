@@ -13,6 +13,7 @@
 		D022F620253F0F9200652752 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D022F61F253F0F9200652752 /* Assets.xcassets */; };
 		D022F623253F0F9200652752 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D022F621253F0F9200652752 /* LaunchScreen.storyboard */; };
 		D022F62D253F0FB000652752 /* XYDropMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = D022F62C253F0FB000652752 /* XYDropMenuView.m */; };
+		D0367ECC253F4145006727EE /* SwiftDropMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0367ECB253F4145006727EE /* SwiftDropMenuView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		D022F62A253F0FAF00652752 /* XYDropMenuView-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XYDropMenuView-Bridging-Header.h"; sourceTree = "<group>"; };
 		D022F62B253F0FB000652752 /* XYDropMenuView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XYDropMenuView.h; sourceTree = "<group>"; };
 		D022F62C253F0FB000652752 /* XYDropMenuView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XYDropMenuView.m; sourceTree = "<group>"; };
+		D0367ECB253F4145006727EE /* SwiftDropMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDropMenuView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 				D022F62B253F0FB000652752 /* XYDropMenuView.h */,
 				D022F62C253F0FB000652752 /* XYDropMenuView.m */,
 				D022F62A253F0FAF00652752 /* XYDropMenuView-Bridging-Header.h */,
+				D0367ECB253F4145006727EE /* SwiftDropMenuView.swift */,
 			);
 			path = XYDropMenuView;
 			sourceTree = "<group>";
@@ -143,6 +146,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0367ECC253F4145006727EE /* SwiftDropMenuView.swift in Sources */,
 				D022F61B253F0F8500652752 /* ViewController.swift in Sources */,
 				D022F62D253F0FB000652752 /* XYDropMenuView.m in Sources */,
 				D022F617253F0F8500652752 /* AppDelegate.swift in Sources */,

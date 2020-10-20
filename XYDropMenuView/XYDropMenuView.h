@@ -15,7 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol XYDropMenuViewDataSource <NSObject>
 @required
 - (NSInteger)numberOfItemsInDropMenuView:(XYDropMenuView *)menu;
-- (CGFloat)heightForLineInDropMenuView:(XYDropMenuView *)menu;
 - (NSString *)dropMenuView:(XYDropMenuView *)menu titleForOptionAtIndex:(NSInteger)index;
 
 @optional
@@ -23,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSInteger)numberOfOneLineInDropMenuView:(XYDropMenuView *)menu;
 // 获取选中的index
 - (NSInteger)indexOfSelectedItemInDropMenuView:(XYDropMenuView *)menu;
+// 获取每行的高度，默认30.0
+- (CGFloat)heightForLineInDropMenuView:(XYDropMenuView *)menu;
 @end
 
 
@@ -44,7 +45,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) id <XYDropMenuViewDataSource> dataSource;
 @property (nonatomic, weak) id <XYDropMenuViewDelegate> delegate;
-
 
 - (void)reloadData;
 
