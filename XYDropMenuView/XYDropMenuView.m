@@ -48,11 +48,12 @@
 
 @interface XYDropMenuView() <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate>
 
-@property (nonatomic, strong) UICollectionView *collectionView;  // 下拉列表
-
+// 下拉列表
+@property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) UIView *floatView;
 @property (nonatomic, strong) UIView *coverView;
-
+// 下拉动画时间 default: 0.25
+@property(nonatomic,assign) CGFloat animateTime;
 @end
 
 @implementation XYDropMenuView
@@ -130,8 +131,8 @@
 
 #pragma mark - Get Methods
 - (UIView *)coverView {
-    UIWindow *window = [self getCurrentKeyWindow];
     if (_coverView == nil) {
+        UIWindow *window = [self getCurrentKeyWindow];
         _coverView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, window.bounds.size.width, window.bounds.size.height)];
         _coverView.backgroundColor = [UIColor clearColor];
         [window addSubview:_coverView];
@@ -159,7 +160,7 @@
 - (NSInteger)totalLines {
     NSUInteger count = [self.dataSource numberOfItemsInDropMenuView:self];
     
-    NSUInteger numberOfOneLine = [self.dataSource numberOfOneLineInDropMenuView:self];
+    NSUInteger numberOfOneLine = [self numberOfOneLine];
     // 计算行数
     NSInteger totalLines = ceil(count / (CGFloat)numberOfOneLine);
     return totalLines;
@@ -266,6 +267,17 @@
     return [UIApplication sharedApplication].keyWindow;
 }
 
+- (NSInteger)numberOfOneLine {
+    if (![self.dataSource respondsToSelector:@selector(numberOfOneLineInDropMenuView:)]) {
+        return  1;
+    }
+    NSUInteger numberOfOnline = [self.dataSource numberOfOneLineInDropMenuView:self];
+    if (numberOfOnline <= 0) {
+        return 1;
+    }
+    return numberOfOnline;
+}
+
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -296,7 +308,7 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSUInteger numberOfOnline = [self.dataSource numberOfOneLineInDropMenuView:self];
+    NSUInteger numberOfOnline = [self numberOfOneLine];
     UIEdgeInsets insets = [self collectionView:collectionView layout:collectionViewLayout insetForSectionAtIndex:indexPath.section];
     NSInteger padding = [self collectionView:collectionView layout:collectionViewLayout minimumInteritemSpacingForSectionAtIndex:indexPath.section];
     CGFloat itemWidth = floor(((collectionView.frame.size.width - insets.left - insets.right) - (numberOfOnline - 1) * padding) / numberOfOnline);

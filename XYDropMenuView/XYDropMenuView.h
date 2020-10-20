@@ -15,12 +15,14 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol XYDropMenuViewDataSource <NSObject>
 @required
 - (NSInteger)numberOfItemsInDropMenuView:(XYDropMenuView *)menu;
+- (CGFloat)heightForLineInDropMenuView:(XYDropMenuView *)menu;
+- (NSString *)dropMenuView:(XYDropMenuView *)menu titleForOptionAtIndex:(NSInteger)index;
+
+@optional
 // 每行展示的数量
 - (NSInteger)numberOfOneLineInDropMenuView:(XYDropMenuView *)menu;
-- (CGFloat)heightForLineInDropMenuView:(XYDropMenuView *)menu;
 // 获取选中的index
 - (NSInteger)indexOfSelectedItemInDropMenuView:(XYDropMenuView *)menu;
-- (NSString *)dropMenuView:(XYDropMenuView *)menu titleForOptionAtIndex:(NSInteger)index;
 @end
 
 
@@ -38,12 +40,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-@interface XYDropMenuView : UIControl
+@interface XYDropMenuView : UIButton
 
 @property (nonatomic, weak) id <XYDropMenuViewDataSource> dataSource;
 @property (nonatomic, weak) id <XYDropMenuViewDelegate> delegate;
-
-@property(nonatomic,assign) CGFloat animateTime;   // 下拉动画时间 default: 0.25
 
 
 - (void)reloadData;
