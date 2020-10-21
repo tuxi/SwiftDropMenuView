@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController {
     
     lazy var menuView = XYDropMenuView()
+    lazy var menuView1 = SwiftDropMenuView()
     
     var titles = ["选项一\n1","选项二\n2","选项三\n3","选项四\n4"]
     var selectedIndex: Int?
@@ -20,10 +21,6 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        self.view.addSubview(self.menuView)
-        
-        self.menuView.delegate = self
-        self.menuView.dataSource = self
         
         let btn = UIButton(frame: CGRect(x: 0, y: 100.0, width: 60, height: 30))
         btn.setTitle("点我", for: .normal)
@@ -33,14 +30,28 @@ class ViewController: UIViewController {
         btn.addTarget(self, action: #selector(btnClick), for: .touchUpInside)
         self.view.addSubview(btn)
         
+        self.view.addSubview(self.menuView)
+        self.menuView.delegate = self
+        self.menuView.dataSource = self
         self.menuView.backgroundColor = UIColor.orange
-        
         self.menuView.translatesAutoresizingMaskIntoConstraints = false
         
         self.menuView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
         self.menuView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         self.menuView.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
         self.menuView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.6).isActive = true
+        
+        self.view.addSubview(self.menuView1)
+        self.menuView1.delegate = self
+        self.menuView1.dataSource = self
+        self.menuView1.backgroundColor = UIColor.red
+        self.menuView1.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.menuView1.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: 50.0).isActive = true
+        self.menuView1.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        self.menuView1.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
+        self.menuView1.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.6).isActive = true
+        self.menuView1.numberOfMaxLines = 2
         
     }
     
@@ -68,7 +79,7 @@ extension ViewController: XYDropMenuViewDataSource {
         return selectedIndex ?? 0
     }
     
-    func dropMenuView(_ menu: XYDropMenuView, titleForOptionAt index: Int) -> String {
+    func dropMenuView(_ menu: XYDropMenuView, titleForItemAt index: Int) -> String {
         return self.titles[index]
     }
     
@@ -80,5 +91,44 @@ extension ViewController: XYDropMenuViewDelegate {
     func dropMenuView(_ menu: XYDropMenuView, didSelectItemAt index: Int, optionTitle title: String) {
         self.selectedIndex = index
     }
+    
+    @nonobjc func dropMenuViewDidShow(_ menu: XYDropMenuView) {
+
+    }
+
+    @nonobjc func dropMenuViewDidHidden(_ menu: XYDropMenuView) {
+
+    }
+
+    @nonobjc func dropMenuViewWillShow(_ menu: XYDropMenuView) {
+
+    }
+
+    @nonobjc func dropMenuViewWillHidden(_ menu: XYDropMenuView) {
+
+    }
 }
 
+extension ViewController: SwiftDropMenuViewDataSource {
+    func numberOfItems(in menu: SwiftDropMenuView) -> Int {
+        return self.titles.count
+    }
+    
+    func dropMenuView(_ menu: SwiftDropMenuView, titleForItemAt index: Int) -> String {
+        return self.titles[index]
+    }
+    
+    func heightForLine(in menu: SwiftDropMenuView) -> CGFloat {
+        return 40.0
+    }
+    
+    func indexOfSelectedItem(in menu: SwiftDropMenuView) -> Int {
+        return selectedIndex ?? 0
+    }
+}
+
+extension ViewController: SwiftDropMenuViewDelegate {
+    func dropMenuView(_ menu: SwiftDropMenuView, didSelectItem: String?, atIndex index: Int) {
+        self.selectedIndex = index
+    }
+}

@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol XYDropMenuViewDataSource <NSObject>
 @required
 - (NSInteger)numberOfItemsInDropMenuView:(XYDropMenuView *)menu;
-- (NSString *)dropMenuView:(XYDropMenuView *)menu titleForOptionAtIndex:(NSInteger)index;
+- (NSString *)dropMenuView:(XYDropMenuView *)menu titleForItemAtIndex:(NSInteger)index;
 
 @optional
 // 每行展示的数量

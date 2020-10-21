@@ -7,101 +7,8 @@
 //
 
 #import "XYDropMenuView.h"
-
-@interface XYDropMenuDefaultCell : UICollectionViewCell
-
-@property (nonatomic, strong) UILabel *titleLabel;
-
-@end
-
-@implementation XYDropMenuDefaultCell
-
-- (UILabel *)titleLabel {
-    if (!_titleLabel) {
-        _titleLabel = [UILabel new];
-        _titleLabel.textAlignment = NSTextAlignmentCenter;
-        _titleLabel.font = [UIFont systemFontOfSize:12.0];
-    }
-    return _titleLabel;
-}
-
-- (instancetype)initWithFrame:(CGRect)frame {
-    if ([super initWithFrame:frame]) {
-        [self.contentView addSubview:self.titleLabel];
-        self.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        
-        [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[titleLabel]|" options:kNilOptions metrics:nil views:@{@"titleLabel": self.titleLabel}]];
-        [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[titleLabel]|" options:kNilOptions metrics:nil views:@{@"titleLabel": self.titleLabel}]];
-        
-        self.contentView.layer.borderColor = [UIColor colorWithRed:221/255.0 green:221/255.0 blue:221/255.0 alpha:1.0].CGColor;
-        self.contentView.backgroundColor = [UIColor whiteColor];
-        self.titleLabel.textColor = [UIColor colorWithRed:111/255.0 green:111/255.0 blue:112/255.0 alpha:1.0];
-        
-        self.contentView.clipsToBounds = true;
-        self.contentView.layer.cornerRadius = 5.0;
-        self.contentView.layer.borderWidth = 1.0;
-    }
-    return self;
-}
-
-@end
-
-@interface XYDropMenuViewBgView : UIControl
-
-@property (nonatomic, strong) UIView *contentView;
-@property (nonatomic, weak) UIControl *coverView;
-@property (nonatomic, weak) NSLayoutConstraint *contentViewTop;
-@property (nonatomic, weak) NSLayoutConstraint *contentViewHeight;
-@property (nonatomic, weak) NSLayoutConstraint *coverViewTop;
-
-@end
-
-@implementation XYDropMenuViewBgView
-
-- (instancetype)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        
-        UIView *coverView = [UIView new];
-        coverView.userInteractionEnabled = NO;
-        coverView.translatesAutoresizingMaskIntoConstraints = NO;
-        coverView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
-        [self addSubview:coverView];
-        NSLayoutConstraint *coverViewTop = [coverView.topAnchor constraintEqualToAnchor:self.topAnchor constant:0];
-        coverViewTop.active = true;
-        self.coverViewTop = coverViewTop;
-        
-        [coverView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:0].active = YES;
-        [coverView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:0].active = YES;
-        [coverView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:0].active = YES;
-        
-        _contentView = [[UIView alloc] initWithFrame:self.bounds];
-        _contentView.layer.masksToBounds = YES;
-        [self addSubview:_contentView];
-        
-        _contentView.translatesAutoresizingMaskIntoConstraints = NO;
-        [_contentView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor].active = YES;
-        [_contentView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor].active = YES;
-        NSLayoutConstraint *top = [_contentView.topAnchor constraintEqualToAnchor:self.topAnchor];
-        top.active = YES;
-        self.contentViewTop = top;
-        NSLayoutConstraint *contentHeight = [self.contentView.heightAnchor constraintEqualToConstant:0.0];
-        contentHeight.active = YES;
-        self.contentViewHeight = contentHeight;
-        
-        self.backgroundColor = [UIColor clearColor];
-        
-    }
-    return self;
-}
-
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-    UIView *touchView = [super hitTest:point withEvent:event];
-    return touchView;
-}
-
-@end
+#import "XYDropMenuViewBgView.h"
+#import "XYDropMenuDefaultCell.h"
 
 @interface XYDropMenuView() <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate>
 
@@ -142,7 +49,6 @@
     // 主按钮 显示在界面上的点击按钮
     [self addTarget:self action:@selector(clickMainBtn:) forControlEvents:UIControlEventTouchUpInside];
     
-    // 下拉列表TableView
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
     _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
@@ -334,7 +240,7 @@
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     XYDropMenuDefaultCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"XYDropMenuDefaultCell" forIndexPath:indexPath];
-    NSString *title = [self.dataSource dropMenuView:self titleForOptionAtIndex:indexPath.row];
+    NSString *title = [self.dataSource dropMenuView:self titleForItemAtIndex:indexPath.row];
     NSInteger selectedIndex = [self.dataSource indexOfSelectedItemInDropMenuView:self];
     
     if (selectedIndex == indexPath.row) {
