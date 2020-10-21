@@ -134,13 +134,13 @@ private class SwiftDropMenuViewBgView: UIControl {
         
     }
     
-    // 只有相对在contentView上的坐标才可以点击
-    func shouldTouch(point: CGPoint) -> Bool {
-        return self.contentView.frame.contains(point) == true
+    // 只有相对在coverView上的坐标才可以点击
+    func shouldTouchInCover(point: CGPoint) -> Bool {
+        return self.coverView.frame.contains(point) == true
     }
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        let flag = shouldTouch(point: point)
+        let flag = shouldTouchInCover(point: point)
         if flag == true {
             return super.hitTest(point, with: event)
         }
@@ -347,9 +347,9 @@ public class SwiftDropMenuView: UIButton {
         // 执行展开动画
         self.collectionViewTop?.constant = 0.0
 
-        UIView.animate(withDuration: self.animateTime) {
+        UIView.animate(withDuration: self.animateTime, animations: {
             self.bgView.layoutIfNeeded()
-        } completion: { (isFinished) in
+        }) { (isFinished) in
             // 已经显示回调代理
             if self.delegate?.responds(to: #selector(SwiftDropMenuViewDelegate.dropMenuViewDidShow(_:))) == true {
                 self.delegate?.dropMenuViewDidShow?(self)
@@ -373,9 +373,9 @@ public class SwiftDropMenuView: UIButton {
        
         // 执行关闭动画
         self.collectionViewTop?.constant = -self.bgView.contentView.frame.size.height
-        UIView.animate(withDuration: self.animateTime) {
+        UIView.animate(withDuration: self.animateTime, animations: {
             self.bgView.layoutIfNeeded()
-        } completion: { (isFinished) in
+        }) { (isFinished) in
             self.bgView.isHidden = true
             self.isOpened = false
             

@@ -363,7 +363,7 @@
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-    if ([self shouldTouchInContent:point]) {
+    if ([self shouldTouchInCover:point]) {
         return [super hitTest:point withEvent:event];
     }
     if (event.type == UIEventTypeTouches
@@ -376,13 +376,10 @@
     return nil;
 }
 
-//- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-//    touches.anyObject.view.frame
-//}
 
 // 只有相对在contentView上的坐标才可以点击
-- (BOOL)shouldTouchInContent:(CGPoint)point {
-    return CGRectContainsPoint(self.contentView.frame, point) == YES;
+- (BOOL)shouldTouchInCover:(CGPoint)point {
+    return CGRectContainsPoint(self.coverView.frame, point) == YES;
 }
 
 @end
