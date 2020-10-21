@@ -91,6 +91,9 @@ private class SwiftDropMenuViewBgView: UIControl {
     weak var coverViewTop: NSLayoutConstraint?
     weak var contentViewHeight: NSLayoutConstraint?
     
+    // 点击了不在contentView 上的坐标
+    var touchNotInContentBlock: ((_ point: CGPoint) -> Void)?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -130,6 +133,26 @@ private class SwiftDropMenuViewBgView: UIControl {
         self.contentViewHeight = contentHeight
         
     }
+    
+    // 只有相对在contentView上的坐标才可以点击
+    func shouldTouch(point: CGPoint) -> Bool {
+        return self.contentView.frame.contains(point) == true
+    }
+    
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let flag = shouldTouch(point: point)
+        if flag == true {
+            return super.hitTest(point, with: event)
+        }
+        if let block = self.touchNotInContentBlock {
+            block(point)
+        }
+        return nil
+    }
+    
+//    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+//        return shouldTouch(point: point)
+//    }
 }
 
 public class SwiftDropMenuView: UIButton {
@@ -270,7 +293,6 @@ public class SwiftDropMenuView: UIButton {
         
         bgView.isHidden = true
         bgView.addTarget(self, action: #selector(tapOnBgView), for: .touchUpInside)
-        
     }
     
     @objc private func clickMe(sender: UIButton) {
@@ -288,7 +310,14 @@ public class SwiftDropMenuView: UIButton {
 
     // 显示下拉菜单
     public func show() {
+        if self.isOpened == true {
+            return
+        }
         self.isOpened = true
+        
+        bgView.touchNotInContentBlock = {[weak self] point in
+            self?.hide()
+        }
         
         let newPosition = self.screenPosition
         self.bgView.contentViewTop?.constant = newPosition.y + self.frame.size.height
@@ -332,6 +361,11 @@ public class SwiftDropMenuView: UIButton {
     
     // 隐藏下拉菜单
     public func hide() {
+        if self.isOpened == false {
+            return
+        }
+
+        self.bgView.touchNotInContentBlock = nil
         if self.delegate?.responds(to: #selector(SwiftDropMenuViewDelegate.dropMenuViewWillHidden(_:))) == true {
             // 将要隐藏回调代理
             self.delegate?.dropMenuViewWillHidden?(self)

@@ -7,8 +7,24 @@
 //
 
 #import "XYDropMenuView.h"
-#import "XYDropMenuViewBgView.h"
-#import "XYDropMenuDefaultCell.h"
+
+@interface XYDropMenuDefaultCell : UICollectionViewCell
+
+@property (nonatomic, strong) UILabel *titleLabel;
+
+@end
+
+@interface XYDropMenuViewBgView : UIControl
+
+@property (nonatomic, strong) UIView *contentView;
+@property (nonatomic, weak) UIControl *coverView;
+@property (nonatomic, weak, nullable) NSLayoutConstraint *contentViewTop;
+@property (nonatomic, weak, nullable) NSLayoutConstraint *contentViewHeight;
+@property (nonatomic, weak, nullable) NSLayoutConstraint *coverViewTop;
+// 触摸了不在contentView 区域的回调
+@property (nonatomic, copy) void (^ touchNotInContentBlock)(CGPoint point);
+
+@end
 
 @interface XYDropMenuView() <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate>
 
@@ -24,7 +40,6 @@
 @end
 
 @implementation XYDropMenuView {
-    CGFloat _listHeight;
     BOOL _isOpened;
 }
 
@@ -48,6 +63,10 @@
     
     // 主按钮 显示在界面上的点击按钮
     [self addTarget:self action:@selector(clickMainBtn:) forControlEvents:UIControlEventTouchUpInside];
+    
+    _bgView = [[XYDropMenuViewBgView alloc] init];
+    [_bgView addTarget:self action:@selector(tapOnBgView) forControlEvents:UIControlEventTouchUpInside];
+    _bgView.hidden = YES;
     
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
@@ -82,15 +101,6 @@
 //    self.bgView.contentViewTop.constant = newPosition.y + self.frame.size.height;
 //}
 
-#pragma mark - Get Methods
-- (XYDropMenuViewBgView *)bgView {
-    if (_bgView == nil) {
-        _bgView = [[XYDropMenuViewBgView alloc] init];
-        [_bgView addTarget:self action:@selector(tapOnBgView) forControlEvents:UIControlEventTouchUpInside];
-        _bgView.hidden = YES;
-    }
-    return _bgView;
-}
 
 
 #pragma mark - Action Methods
@@ -116,7 +126,16 @@
 }
 
 - (void)show {
+    if (_isOpened) {
+        return;
+    }
     _isOpened = YES;
+    
+    __weak typeof(self) weakSelf = self;
+    self.bgView.touchNotInContentBlock = ^(CGPoint point) {
+        [weakSelf hide];
+    };
+    
     CGPoint newPosition = [self getScreenPosition];
     self.bgView.contentViewTop.constant = newPosition.y + self.frame.size.height;
     
@@ -140,16 +159,16 @@
     // 菜单高度计算
     // 计算行数
     NSInteger totalLines = [self totalLines];
-    _listHeight = [self heightForLine] * totalLines;
+    CGFloat listHeight = [self heightForLine] * totalLines;
     UIEdgeInsets insets = [self collectionView:self.collectionView layout:(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout insetForSectionAtIndex:0];
-    _listHeight += insets.top + insets.bottom;
+    listHeight += insets.top + insets.bottom;
     
     // 加上每行之间的间距
     CGFloat padding = [self collectionView:self.collectionView layout:(UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout minimumLineSpacingForSectionAtIndex:0];
-    _listHeight += (totalLines - 1) * padding;
+    listHeight += (totalLines - 1) * padding;
     
     
-    self.bgView.contentViewHeight.constant = _listHeight;
+    self.bgView.contentViewHeight.constant = listHeight;
     [self.bgView layoutIfNeeded];
     self.bgView.hidden = NO;
     
@@ -171,10 +190,13 @@
 }
 
 - (void)hide {
+    if (_isOpened == NO) {
+        return;
+    }
     if ([self.delegate respondsToSelector:@selector(dropMenuViewWillHidden:)]) {
         [self.delegate dropMenuViewWillHidden:self]; // 将要隐藏回调代理
     }
-
+    self.bgView.touchNotInContentBlock = nil;
     // 执行关闭动画
     self.collectionViewTop.constant = -self.bgView.contentView.frame.size.height;
     [UIView animateWithDuration:self.animateTime animations:^{
@@ -298,3 +320,102 @@
 
 @end
 
+
+
+@implementation XYDropMenuViewBgView
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        
+        UIView *coverView = [UIView new];
+        coverView.userInteractionEnabled = NO;
+        coverView.translatesAutoresizingMaskIntoConstraints = NO;
+        coverView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
+        [self addSubview:coverView];
+        NSLayoutConstraint *coverViewTop = [coverView.topAnchor constraintEqualToAnchor:self.topAnchor constant:0];
+        coverViewTop.active = true;
+        self.coverViewTop = coverViewTop;
+        
+        [coverView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:0].active = YES;
+        [coverView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:0].active = YES;
+        [coverView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:0].active = YES;
+        
+        _contentView = [[UIView alloc] initWithFrame:self.bounds];
+        _contentView.layer.masksToBounds = YES;
+        [self addSubview:_contentView];
+        
+        _contentView.translatesAutoresizingMaskIntoConstraints = NO;
+        [_contentView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor].active = YES;
+        [_contentView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor].active = YES;
+        NSLayoutConstraint *top = [_contentView.topAnchor constraintEqualToAnchor:self.topAnchor];
+        top.active = YES;
+        self.contentViewTop = top;
+        NSLayoutConstraint *contentHeight = [self.contentView.heightAnchor constraintEqualToConstant:0.0];
+        contentHeight.active = YES;
+        self.contentViewHeight = contentHeight;
+        
+        self.backgroundColor = [UIColor clearColor];
+        
+    }
+    return self;
+}
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    if ([self shouldTouchInContent:point]) {
+        return [super hitTest:point withEvent:event];
+    }
+    if (event.type == UIEventTypeTouches
+        /*&& event.allTouches.anyObject.phase == UITouchPhaseEnded*/
+    ) {
+        if (self.touchNotInContentBlock) {
+            self.touchNotInContentBlock(point);
+        }
+    }
+    return nil;
+}
+
+//- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+//    touches.anyObject.view.frame
+//}
+
+// 只有相对在contentView上的坐标才可以点击
+- (BOOL)shouldTouchInContent:(CGPoint)point {
+    return CGRectContainsPoint(self.contentView.frame, point) == YES;
+}
+
+@end
+
+
+@implementation XYDropMenuDefaultCell
+
+- (UILabel *)titleLabel {
+    if (!_titleLabel) {
+        _titleLabel = [UILabel new];
+        _titleLabel.textAlignment = NSTextAlignmentCenter;
+        _titleLabel.font = [UIFont systemFontOfSize:12.0];
+    }
+    return _titleLabel;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    if ([super initWithFrame:frame]) {
+        [self.contentView addSubview:self.titleLabel];
+        self.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        
+        [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[titleLabel]|" options:kNilOptions metrics:nil views:@{@"titleLabel": self.titleLabel}]];
+        [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[titleLabel]|" options:kNilOptions metrics:nil views:@{@"titleLabel": self.titleLabel}]];
+        
+        self.contentView.layer.borderColor = [UIColor colorWithRed:221/255.0 green:221/255.0 blue:221/255.0 alpha:1.0].CGColor;
+        self.contentView.backgroundColor = [UIColor whiteColor];
+        self.titleLabel.textColor = [UIColor colorWithRed:111/255.0 green:111/255.0 blue:112/255.0 alpha:1.0];
+        
+        self.contentView.clipsToBounds = true;
+        self.contentView.layer.cornerRadius = 5.0;
+        self.contentView.layer.borderWidth = 1.0;
+    }
+    return self;
+}
+
+@end
