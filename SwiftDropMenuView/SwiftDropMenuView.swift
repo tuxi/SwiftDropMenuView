@@ -1,6 +1,6 @@
 //
 //  SwiftDropMenuView.swift
-//  XYDropMenuView
+//  SwiftDropMenuView
 //
 //  Created by xiaoyuan on 2020/10/21.
 //  Copyright © 2020 xiaoyuan. All rights reserved.
