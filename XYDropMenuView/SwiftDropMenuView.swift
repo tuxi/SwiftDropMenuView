@@ -140,7 +140,8 @@ public class SwiftDropMenuView: UIButton {
     public var numberOfMaxLines: Int?
     
     // 下拉列表
-    private lazy var collectionView: UICollectionView = {
+    private weak var collectionView: UICollectionView?
+    private var createCollectionView: UICollectionView {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout);
@@ -148,25 +149,14 @@ public class SwiftDropMenuView: UIButton {
         collectionView.backgroundColor = .white
         collectionView.register(SeiftDropMenuDefaultCell.self, forCellWithReuseIdentifier: "SeiftDropMenuDefaultCell")
         return collectionView
-    }()
+    }
     
     private weak var collectionViewTop: NSLayoutConstraint?
 
     // 下拉动画时间 default: 0.25
     private var animateTime: TimeInterval = 0.25
     private var isOpened = false
-    private lazy var bgView: SwiftDropMenuViewBgView = {
-        let bgView = SwiftDropMenuViewBgView()
-        bgView.isHidden = true
-        bgView.addTarget(self, action: #selector(tapOnBgView), for: .touchUpInside)
-//        let window = SwiftDropMenuView.currentKeyWindow
-//        window.addSubview(bgView)
-//        bgView.translatesAutoresizingMaskIntoConstraints = false
-//        var constraints = NSLayoutConstraint.constraints(withVisualFormat: "V:|[bgView]|", options: [], metrics: nil, views: ["bgView": bgView])
-//        constraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "H:|[bgView]|", options: [], metrics: nil, views: ["bgView": bgView]))
-//        window.addConstraints(constraints)
-        return bgView
-    }()
+    private var bgView = SwiftDropMenuViewBgView()
     
     private var numberOfOneLine: Int {
         
@@ -195,21 +185,24 @@ public class SwiftDropMenuView: UIButton {
 
     // 计算行数
     private var listHeight: CGFloat {
+        guard let collectionView = self.collectionView else {
+            return 0.0
+        }
         var totalLines = self.totalLines
         if let maxLines = self.numberOfMaxLines, totalLines > maxLines {
             totalLines = maxLines
-            self.collectionView.isScrollEnabled = true
+            collectionView.isScrollEnabled = true
         }
         else {
-            self.collectionView.isScrollEnabled = false
+            collectionView.isScrollEnabled = false
         }
         var listHeight = floor(self.heightForLine * CGFloat(totalLines))
-        let insets = self.collectionView(collectionView, layout: self.collectionView.collectionViewLayout as! UICollectionViewFlowLayout, insetForSectionAt: 0)
+        let insets = self.collectionView(collectionView, layout: collectionView.collectionViewLayout as! UICollectionViewFlowLayout, insetForSectionAt: 0)
         
         listHeight += insets.top + insets.bottom
 
         // 加上每行之间的间距
-        let linePadding = self.collectionView(collectionView, layout: self.collectionView.collectionViewLayout as! UICollectionViewFlowLayout, minimumLineSpacingForSectionAt: 0)
+        let linePadding = self.collectionView(collectionView, layout: collectionView.collectionViewLayout as! UICollectionViewFlowLayout, minimumLineSpacingForSectionAt: 0)
         listHeight += CGFloat(totalLines - 1) * linePadding
         return listHeight
     }
@@ -237,6 +230,9 @@ public class SwiftDropMenuView: UIButton {
         return self.superview?.convert(self.frame.origin, to: Self.currentKeyWindow) ?? .zero
     }
 
+    deinit {
+        self.bgView.removeFromSuperview()
+    }
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -254,10 +250,11 @@ public class SwiftDropMenuView: UIButton {
     }
     
     private func commonInit() {
+        let collectionView = self.createCollectionView
         collectionView.delegate = self
         collectionView.dataSource  = self
         
-        self.bgView.contentView.addSubview(self.collectionView)
+        self.bgView.contentView.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         collectionView.leadingAnchor.constraint(equalTo: self.bgView.contentView.leadingAnchor).isActive = true
@@ -267,7 +264,12 @@ public class SwiftDropMenuView: UIButton {
         self.collectionViewTop = collectionViewTop
         collectionView.heightAnchor.constraint(equalTo: self.bgView.contentView.heightAnchor).isActive = true
         
+        self.collectionView = collectionView
+        
         self.addTarget(self, action: #selector(clickMe(sender:)), for: .touchUpInside)
+        
+        bgView.isHidden = true
+        bgView.addTarget(self, action: #selector(tapOnBgView), for: .touchUpInside)
         
     }
     
@@ -281,7 +283,7 @@ public class SwiftDropMenuView: UIButton {
     }
 
     public func reloadData() {
-        self.collectionView.reloadData()
+        self.collectionView?.reloadData()
     }
 
     // 显示下拉菜单
