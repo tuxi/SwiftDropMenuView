@@ -1,14 +1,13 @@
 //
 //  AppDelegate.swift
-//  XYDropMenuView
+//  SwiftDropMenuView
 //
-//  Created by xiaoyuan on 2020/10/20.
-//  Copyright © 2020 xiaoyuan. All rights reserved.
+//  Created by xiaoyuan on 2020/10/21.
 //
 
 import UIKit
 
-@UIApplicationMain
+@main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
@@ -17,5 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         return true
     }
+
 }
 

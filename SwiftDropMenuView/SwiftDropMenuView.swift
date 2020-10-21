@@ -161,6 +161,11 @@ public class SwiftDropMenuView: UIButton {
     public weak var delegate: SwiftDropMenuViewDelegate?
     // 最多展示的行数，当实际行数大于numberOfMaxLines时，支持滚动
     public var numberOfMaxLines: Int?
+    public var contentBackgroundColor: UIColor = .white {
+        didSet {
+            self.collectionView?.backgroundColor = contentBackgroundColor
+        }
+    }
     
     // 下拉列表
     private weak var collectionView: UICollectionView?
@@ -169,7 +174,7 @@ public class SwiftDropMenuView: UIButton {
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout);
         collectionView.isScrollEnabled  = false
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .clear
         collectionView.register(SeiftDropMenuDefaultCell.self, forCellWithReuseIdentifier: "SeiftDropMenuDefaultCell")
         return collectionView
     }
@@ -293,6 +298,8 @@ public class SwiftDropMenuView: UIButton {
         
         bgView.isHidden = true
         bgView.addTarget(self, action: #selector(tapOnBgView), for: .touchUpInside)
+        
+        self.collectionView?.backgroundColor = self.contentBackgroundColor
     }
     
     @objc private func clickMe(sender: UIButton) {
@@ -338,6 +345,12 @@ public class SwiftDropMenuView: UIButton {
         
         // 刷新下拉列表数据
         reloadData()
+        DispatchQueue.main.async {
+            if self.dataSource?.numberOfItems(in: self) != 0 && self.dataSource?.responds(to: #selector(SwiftDropMenuViewDataSource.indexOfSelectedItem(in:))) == true {
+                let index = self.dataSource?.indexOfSelectedItem?(in: self) ?? 0
+                self.collectionView?.scrollToItem(at: IndexPath(item: index, section: 0), at: .top, animated: true)
+            }
+        }
         
         // 菜单高度计算
         self.bgView.contentViewHeight?.constant = listHeight
