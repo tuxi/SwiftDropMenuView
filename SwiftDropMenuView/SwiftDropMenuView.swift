@@ -32,7 +32,7 @@ import UIKit
     @objc optional func dropMenuViewWillHidden(_ menu: SwiftDropMenuView)
 }
 
-private class SeiftDropMenuDefaultCell: UICollectionViewCell {
+private class SwiftDropMenuDefaultCell: UICollectionViewCell {
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.textAlignment = .center
@@ -175,7 +175,7 @@ public class SwiftDropMenuView: UIButton {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout);
         collectionView.isScrollEnabled  = false
         collectionView.backgroundColor = .clear
-        collectionView.register(SeiftDropMenuDefaultCell.self, forCellWithReuseIdentifier: "SeiftDropMenuDefaultCell")
+        collectionView.register(SwiftDropMenuDefaultCell.self, forCellWithReuseIdentifier: "SwiftDropMenuDefaultCell")
         return collectionView
     }
     
@@ -411,7 +411,7 @@ extension SwiftDropMenuView: UICollectionViewDataSource {
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SeiftDropMenuDefaultCell", for: indexPath) as! SeiftDropMenuDefaultCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SwiftDropMenuDefaultCell", for: indexPath) as! SwiftDropMenuDefaultCell
         let title = self.dataSource?.dropMenuView(self, titleForItemAt: indexPath.row)
         let selectIndex = self.dataSource?.indexOfSelectedItem?(in: self)
         if selectIndex == indexPath.row {
@@ -456,7 +456,7 @@ extension SwiftDropMenuView: UICollectionViewDelegateFlowLayout {
     }
 
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath:  IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! SeiftDropMenuDefaultCell
+        let cell = collectionView.cellForItem(at: indexPath) as! SwiftDropMenuDefaultCell
         if self.delegate?.responds(to: #selector(SwiftDropMenuViewDelegate.dropMenuView(_:didSelectItem:atIndex:))) == true {
             self.delegate?.dropMenuView?(self, didSelectItem: cell.titleLabel.text, atIndex: indexPath.row)
         }
