@@ -11,11 +11,11 @@ class ViewController: UIViewController {
 
     var titles = ["选项一\n1","选项二\n2","选项三\n3","选项四\n4", "选项五\n5", "选项六\n5", "选项七\n7"]
     var selectedIndex: Int?
-    weak var dropMenu1: SwiftDropMenuView?
-    weak var dropMenu2: SwiftDropMenuView?
+    weak var dropMenu1: SwiftDropMenuListView?
+    weak var dropMenu2: SwiftDropMenuListView?
     
     
-    weak var ocMenuView: XYDropMenuView?
+    weak var ocMenuView: SwiftDropMenuListView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,8 +24,9 @@ class ViewController: UIViewController {
         self.view.backgroundColor = UIColor.white
         self.title = "DropMenu"
         
-        let dropMenu = SwiftDropMenuView(frame: CGRect(x: 0, y: 0, width: 50, height: 40))
-        dropMenu.numberOfMaxLines = 5
+        let dropMenu = SwiftDropMenuListView(frame: CGRect(x: 0, y: 0, width: 50, height: 40))
+        dropMenu.backgroundColor = UIColor.blue
+        dropMenu.numberOfMaxRows = 5
         dropMenu.setTitle("点我", for: .normal)
         dropMenu.dataSource = self
         dropMenu.delegate = self
@@ -33,7 +34,7 @@ class ViewController: UIViewController {
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: dropMenu)
         
-        let dropMenu1 = SwiftDropMenuView()
+        let dropMenu1 = SwiftDropMenuListView(frame: .zero)
         dropMenu1.contentBackgroundColor = UIColor.green
         dropMenu1.setTitle("点我", for: .normal)
         dropMenu1.backgroundColor = UIColor.orange
@@ -50,7 +51,8 @@ class ViewController: UIViewController {
         dropMenu1.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         
         
-        let ocMenuView = XYDropMenuView()
+        let ocMenuView = SwiftDropMenuListView(frame: .zero)
+        ocMenuView.setTitle("点我", for: .normal)
         self.view.addSubview(ocMenuView)
         ocMenuView.delegate = self
         ocMenuView.dataSource = self
@@ -63,29 +65,38 @@ class ViewController: UIViewController {
         ocMenuView.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
         ocMenuView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.6).isActive = true
         
+        /// 自定义`listView`
+        let segmentView = ServicePointSegmentedView()
+        view.addSubview(segmentView)
+        segmentView.translatesAutoresizingMaskIntoConstraints = false
+        segmentView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        segmentView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        segmentView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        segmentView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        
     }
 
 
 }
 
-extension ViewController: SwiftDropMenuViewDataSource {
-    func numberOfItems(in menu: SwiftDropMenuView) -> Int {
+extension ViewController: SwiftDropMenuListViewDataSource {
+    func numberOfItems(in menu: SwiftDropMenuListView) -> Int {
         return self.titles.count
     }
     
-    func dropMenuView(_ menu: SwiftDropMenuView, titleForItemAt index: Int) -> String {
+    func dropMenu(_ menu: SwiftDropMenuListView, titleForItemAt index: Int) -> String {
         return self.titles[index]
     }
     
-    func heightForLine(in menu: SwiftDropMenuView) -> CGFloat {
+    func heightOfRow(in menu: SwiftDropMenuListView) -> CGFloat {
         return 40.0
     }
     
-    func indexOfSelectedItem(in menu: SwiftDropMenuView) -> Int {
+    func indexOfSelectedItem(in menu: SwiftDropMenuListView) -> Int {
         return selectedIndex ?? 0
     }
     
-    func numberOfOneLine(in menu: SwiftDropMenuView) -> Int {
+    func numberOfColumns(in menu: SwiftDropMenuListView) -> Int {
         if menu == self.dropMenu1 {
             return 1
         }
@@ -93,57 +104,10 @@ extension ViewController: SwiftDropMenuViewDataSource {
     }
 }
 
-extension ViewController: SwiftDropMenuViewDelegate {
-    func dropMenuView(_ menu: SwiftDropMenuView, didSelectItem: String?, atIndex index: Int) {
+extension ViewController: SwiftDropMenuListViewDelegate {
+    func dropMenu(_ menu: SwiftDropMenuListView, didSelectItem: String?, atIndex index: Int) {
         self.selectedIndex = index
     }
 }
 
 
-// oc 的 menuView
-extension ViewController: XYDropMenuViewDataSource {
-    func numberOfItems(in menu: XYDropMenuView) -> Int {
-        return self.titles.count
-    }
-    
-    func numberOfOneLine(in menu: XYDropMenuView) -> Int {
-        return 5
-    }
-    
-    func heightForLine(in menu: XYDropMenuView) -> CGFloat {
-        return 40.0
-    }
-    
-    func indexOfSelectedItem(in menu: XYDropMenuView) -> Int {
-        return selectedIndex ?? 0
-    }
-    
-    func dropMenuView(_ menu: XYDropMenuView, titleForItemAt index: Int) -> String {
-        return self.titles[index]
-    }
-    
-    
-}
-
-extension ViewController: XYDropMenuViewDelegate {
-    
-    func dropMenuView(_ menu: XYDropMenuView, didSelectItemAt index: Int, optionTitle title: String) {
-        self.selectedIndex = index
-    }
-    
-    @nonobjc func dropMenuViewDidShow(_ menu: XYDropMenuView) {
-
-    }
-
-    @nonobjc func dropMenuViewDidHidden(_ menu: XYDropMenuView) {
-
-    }
-
-    @nonobjc func dropMenuViewWillShow(_ menu: XYDropMenuView) {
-
-    }
-
-    @nonobjc func dropMenuViewWillHidden(_ menu: XYDropMenuView) {
-
-    }
-}

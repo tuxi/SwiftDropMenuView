@@ -14,8 +14,10 @@
 		D05791CF2540209600D7F72F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D05791CD2540209600D7F72F /* LaunchScreen.storyboard */; };
 		D05791DA2540209600D7F72F /* SwiftDropMenuViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05791D92540209600D7F72F /* SwiftDropMenuViewTests.swift */; };
 		D05791E52540209600D7F72F /* SwiftDropMenuViewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05791E42540209600D7F72F /* SwiftDropMenuViewUITests.swift */; };
-		D057921025402AF600D7F72F /* XYDropMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = D057920E25402AF600D7F72F /* XYDropMenuView.m */; };
-		D057921125402AF600D7F72F /* SwiftDropMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D057920F25402AF600D7F72F /* SwiftDropMenuView.swift */; };
+		D08535D826A46C070032F6B9 /* SwiftDropMenuControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08535D726A46C070032F6B9 /* SwiftDropMenuControl.swift */; };
+		D08535DB26A46C490032F6B9 /* ServicePointSegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08535D926A46C490032F6B9 /* ServicePointSegmentedView.swift */; };
+		D08535DC26A46C490032F6B9 /* NearbyFilterDropMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08535DA26A46C490032F6B9 /* NearbyFilterDropMenuView.swift */; };
+		D08535DE26A46C6E0032F6B9 /* Then.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08535DD26A46C6E0032F6B9 /* Then.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,10 +51,10 @@
 		D05791E02540209600D7F72F /* SwiftDropMenuViewUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftDropMenuViewUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05791E42540209600D7F72F /* SwiftDropMenuViewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDropMenuViewUITests.swift; sourceTree = "<group>"; };
 		D05791E62540209600D7F72F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D05792032540275D00D7F72F /* SwiftDropMenuView-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftDropMenuView-Bridging-Header.h"; sourceTree = "<group>"; };
-		D057920D25402AF600D7F72F /* XYDropMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYDropMenuView.h; sourceTree = "<group>"; };
-		D057920E25402AF600D7F72F /* XYDropMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYDropMenuView.m; sourceTree = "<group>"; };
-		D057920F25402AF600D7F72F /* SwiftDropMenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftDropMenuView.swift; sourceTree = "<group>"; };
+		D08535D726A46C070032F6B9 /* SwiftDropMenuControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftDropMenuControl.swift; sourceTree = "<group>"; };
+		D08535D926A46C490032F6B9 /* ServicePointSegmentedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServicePointSegmentedView.swift; sourceTree = "<group>"; };
+		D08535DA26A46C490032F6B9 /* NearbyFilterDropMenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NearbyFilterDropMenuView.swift; sourceTree = "<group>"; };
+		D08535DD26A46C6E0032F6B9 /* Then.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Then.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,16 +105,16 @@
 		D05791C12540209400D7F72F /* SwiftDropMenuView */ = {
 			isa = PBXGroup;
 			children = (
-				D057920F25402AF600D7F72F /* SwiftDropMenuView.swift */,
-				D057920D25402AF600D7F72F /* XYDropMenuView.h */,
-				D057920E25402AF600D7F72F /* XYDropMenuView.m */,
+				D08535D626A46C070032F6B9 /* Source */,
 				D05791C22540209400D7F72F /* AppDelegate.swift */,
 				D05791C62540209400D7F72F /* ViewController.swift */,
 				D05791C82540209400D7F72F /* Main.storyboard */,
 				D05791CB2540209600D7F72F /* Assets.xcassets */,
+				D08535DA26A46C490032F6B9 /* NearbyFilterDropMenuView.swift */,
+				D08535D926A46C490032F6B9 /* ServicePointSegmentedView.swift */,
 				D05791CD2540209600D7F72F /* LaunchScreen.storyboard */,
+				D08535DD26A46C6E0032F6B9 /* Then.swift */,
 				D05791D02540209600D7F72F /* Info.plist */,
-				D05792032540275D00D7F72F /* SwiftDropMenuView-Bridging-Header.h */,
 			);
 			path = SwiftDropMenuView;
 			sourceTree = "<group>";
@@ -133,6 +135,14 @@
 				D05791E62540209600D7F72F /* Info.plist */,
 			);
 			path = SwiftDropMenuViewUITests;
+			sourceTree = "<group>";
+		};
+		D08535D626A46C070032F6B9 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				D08535D726A46C070032F6B9 /* SwiftDropMenuControl.swift */,
+			);
+			path = Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -266,10 +276,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D057921125402AF600D7F72F /* SwiftDropMenuView.swift in Sources */,
+				D08535DB26A46C490032F6B9 /* ServicePointSegmentedView.swift in Sources */,
 				D05791C72540209400D7F72F /* ViewController.swift in Sources */,
-				D057921025402AF600D7F72F /* XYDropMenuView.m in Sources */,
 				D05791C32540209400D7F72F /* AppDelegate.swift in Sources */,
+				D08535DC26A46C490032F6B9 /* NearbyFilterDropMenuView.swift in Sources */,
+				D08535DE26A46C6E0032F6B9 /* Then.swift in Sources */,
+				D08535D826A46C070032F6B9 /* SwiftDropMenuControl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,14 +461,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = NKW67GFDHM;
 				INFOPLIST_FILE = SwiftDropMenuView/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.enba.SwiftDropMenuView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "SwiftDropMenuView/SwiftDropMenuView-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -472,14 +484,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = NKW67GFDHM;
 				INFOPLIST_FILE = SwiftDropMenuView/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.enba.SwiftDropMenuView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "SwiftDropMenuView/SwiftDropMenuView-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
