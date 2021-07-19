@@ -83,87 +83,6 @@ private class SwiftDropMenuDefaultCell: UICollectionViewCell {
     }
 }
 
-private class SwiftDropMenuBgView: UIControl {
-    
-    lazy var contentView: UIView = {
-        let contentView = UIView(frame: self.bounds)
-        contentView.layer.masksToBounds = true
-        return contentView
-    }()
-    lazy var coverView: UIView = {
-        let coverView = UIView()
-        coverView.isUserInteractionEnabled = false
-        coverView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
-        return coverView
-    }()
-    
-    weak var contentViewTop: NSLayoutConstraint?
-    weak var coverViewTop: NSLayoutConstraint?
-    weak var contentViewHeight: NSLayoutConstraint?
-    
-    // 点击了不在contentView 上的坐标
-    var touchNotInContentBlock: ((_ point: CGPoint) -> Void)?
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        commonInit()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        commonInit()
-    }
-    
-    private func commonInit() {
-        
-        self.backgroundColor = .clear
-        
-        self.addSubview(self.coverView)
-        self.coverView.translatesAutoresizingMaskIntoConstraints = false
-        let coverViewTop = coverView.topAnchor.constraint(equalTo: self.topAnchor)
-        coverViewTop.isActive = true
-        self.coverViewTop = coverViewTop
-        coverView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        coverView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-        coverView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        
-        self.addSubview(self.contentView)
-        self.contentView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-        let contentViewTop = contentView.topAnchor.constraint(equalTo: self.topAnchor)
-        contentViewTop.isActive = true
-        self.contentViewTop = contentViewTop
-        let contentHeight = contentView.heightAnchor.constraint(equalToConstant: 0.0)
-        contentHeight.isActive = true
-        self.contentViewHeight = contentHeight
-        
-    }
-    
-    // 只有相对在coverView上的坐标才可以点击
-    func shouldTouchInCover(point: CGPoint) -> Bool {
-        return self.coverView.frame.contains(point) == true
-    }
-    
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        let flag = shouldTouchInCover(point: point)
-        if flag == true {
-            return super.hitTest(point, with: event)
-        }
-        if let block = self.touchNotInContentBlock {
-            block(point)
-        }
-        return nil
-    }
-    
-//    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-//        return shouldTouch(point: point)
-//    }
-}
 
 /// 下拉菜单的基类，可单独使用，需要自定义listView
 open class SwiftDropMenuControl: UIButton {
@@ -183,15 +102,13 @@ open class SwiftDropMenuControl: UIButton {
     open var listView: UIView
     
     weak open var delegate: SwiftDropMenuControlDelegate?
-    
-    fileprivate weak var listViewTop: NSLayoutConstraint?
 
     /// 下拉动画时间 default: 0.25
     public var animateDuration: TimeInterval = 0.25
     /// 下拉菜单的状态，默认为关闭
     public private(set) var status: Status = .closed
     /// 下拉菜单的背景视图
-    fileprivate var bgView = SwiftDropMenuBgView()
+    fileprivate lazy var contentView = SwiftDropMenuContentView(contentView: listView)
     
     // 计算行数
     open var listHeight: CGFloat {
@@ -237,7 +154,7 @@ open class SwiftDropMenuControl: UIButton {
     }
 
     deinit {
-        self.bgView.removeFromSuperview()
+        self.contentView.removeFromSuperview()
     }
     
     public init(frame: CGRect, listView: UIView) {
@@ -258,25 +175,16 @@ open class SwiftDropMenuControl: UIButton {
     }
     
     fileprivate func commonInit() {
-        self.bgView.contentView.addSubview(listView)
-        listView.translatesAutoresizingMaskIntoConstraints = false
         
-        listView.leadingAnchor.constraint(equalTo: self.bgView.contentView.leadingAnchor).isActive = true
-        listView.trailingAnchor.constraint(equalTo: self.bgView.contentView.trailingAnchor).isActive = true
-        let listViewTop = listView.topAnchor.constraint(equalTo: self.bgView.contentView.topAnchor)
-        listViewTop.isActive = true
-        self.listViewTop = listViewTop
-        listView.heightAnchor.constraint(equalTo: self.bgView.contentView.heightAnchor).isActive = true
+        self.addTarget(self, action: #selector(touchMe(sender:)), for: .touchUpInside)
         
-        self.addTarget(self, action: #selector(clickMe(sender:)), for: .touchUpInside)
-        
-        bgView.isHidden = true
-        bgView.addTarget(self, action: #selector(tapOnBgView), for: .touchUpInside)
+        contentView.isHidden = true
+        contentView.addTarget(self, action: #selector(tapOnContentView), for: .touchUpInside)
         
         self.listView.backgroundColor = self.contentBackgroundColor
     }
     
-    @objc private func clickMe(sender: UIButton) {
+    @objc private func touchMe(sender: UIButton) {
         if self.shouldTouchMe == true {
             self.toggle()
         }
@@ -298,41 +206,41 @@ open class SwiftDropMenuControl: UIButton {
         }
         status = .opened
         
-        bgView.touchNotInContentBlock = {[weak self] point in
+        contentView.touchNotInContentBlock = {[weak self] point in
             self?.hide()
         }
         
         let newPosition = self.screenPosition
-        self.bgView.contentViewTop?.constant = newPosition.y + self.frame.size.height
+        contentView.masksViewTop?.constant = newPosition.y + self.frame.size.height
         
-        self.bgView.contentView.layer.borderColor  = self.layer.borderColor
-        self.bgView.contentView.layer.borderWidth  = self.layer.borderWidth
-        self.bgView.contentView.layer.cornerRadius = self.layer.cornerRadius
-        self.bgView.coverViewTop?.constant = newPosition.y + self.frame.size.height
+        contentView.masksView.layer.borderColor  = self.layer.borderColor
+        contentView.masksView.layer.borderWidth  = self.layer.borderWidth
+        contentView.masksView.layer.cornerRadius = self.layer.cornerRadius
+        contentView.coverViewTop?.constant = newPosition.y + self.frame.size.height
         
         let window = SwiftDropMenuControl.currentKeyWindow
-        window.addSubview(self.bgView)
-        self.bgView.frame = window.bounds
+        window.addSubview(contentView)
+        contentView.frame = window.bounds
         
-        if self.delegate?.responds(to: #selector(SwiftDropMenuListViewDelegate.willDisplay(forDropMenu:))) == true {
+        if delegate?.responds(to: #selector(SwiftDropMenuListViewDelegate.willDisplay(forDropMenu:))) == true {
             // 将要显示回调代理
             self.delegate?.willDisplay?(forDropMenu: self)
         }
         
         // 菜单高度计算
-        self.bgView.contentViewHeight?.constant = listHeight
-        self.bgView.layoutIfNeeded()
-        self.bgView.isHidden = false
+        contentView.masksViewHeight?.constant = listHeight
+        contentView.layoutIfNeeded()
+        contentView.isHidden = false
 
         // 执行展开动画
-        self.listViewTop?.constant = 0.0
+        contentView.contentViewTop?.constant = 0.0
 
-        UIView.animate(withDuration: self.animateDuration, animations: {
-            self.bgView.layoutIfNeeded()
-        }) { (isFinished) in
+        UIView.animate(withDuration: self.animateDuration, animations: { [unowned self] in
+            contentView.layoutIfNeeded()
+        }) { [unowned self] (isFinished) in
             // 已经显示回调代理
-            if self.delegate?.responds(to: #selector(SwiftDropMenuListViewDelegate.didDisplay(forDropMenu:))) == true {
-                self.delegate?.didDisplay?(forDropMenu: self)
+            if delegate?.responds(to: #selector(SwiftDropMenuListViewDelegate.didDisplay(forDropMenu:))) == true {
+                delegate?.didDisplay?(forDropMenu: self)
             }
         }
     }
@@ -345,30 +253,30 @@ open class SwiftDropMenuControl: UIButton {
             return
         }
 
-        self.bgView.touchNotInContentBlock = nil
+        self.contentView.touchNotInContentBlock = nil
         if self.delegate?.responds(to: #selector(SwiftDropMenuListViewDelegate.willHidden(forDropMenu:))) == true {
             // 将要隐藏回调代理
             self.delegate?.willHidden?(forDropMenu: self)
         }
        
-        // 执行关闭动画
-        self.listViewTop?.constant = -self.bgView.contentView.frame.size.height
-        UIView.animate(withDuration: self.animateDuration, delay: 0, options: .curveEaseInOut) {
-            self.bgView.alpha = 0
-            self.bgView.layoutIfNeeded()
-        } completion: { isFinished in
-            self.bgView.isHidden = true
-            self.bgView.alpha = 1
-            self.status = .closed
+        // 执行关闭动画，让contentView 在`masksView`(`contentView`的父视图)之上，目的是让其不现实
+        self.contentView.contentViewTop?.constant = -contentView.masksView.frame.size.height
+        UIView.animate(withDuration: self.animateDuration, delay: 0, options: .curveEaseInOut) { [unowned self] in
+            contentView.alpha = 0
+            contentView.layoutIfNeeded()
+        } completion: { [unowned self] isFinished in
+            contentView.isHidden = true
+            contentView.alpha = 1
+            status = .closed
             
-            if self.delegate?.responds(to: #selector(SwiftDropMenuListViewDelegate.didHidden(forDropMenu:))) == true {
+            if delegate?.responds(to: #selector(SwiftDropMenuListViewDelegate.didHidden(forDropMenu:))) == true {
                 // 已经隐藏回调代理
-                self.delegate?.didHidden?(forDropMenu: self)
+                delegate?.didHidden?(forDropMenu: self)
             }
         }
     }
     
-    @objc private func tapOnBgView() {
+    @objc private func tapOnContentView() {
         hide()
     }
 }
@@ -395,7 +303,7 @@ open class SwiftDropMenuListView: SwiftDropMenuControl {
     }
     
     private var totalRows: Int {
-        guard let count = self.dataSource?.numberOfItems(in: self) else {
+        guard let count = dataSource?.numberOfItems(in: self) else {
             return 0
         }
          // 计算行数
@@ -404,10 +312,10 @@ open class SwiftDropMenuListView: SwiftDropMenuControl {
     }
     
     private var heightOfRow: CGFloat {
-        if self.dataSource?.responds(to: #selector(SwiftDropMenuListViewDataSource.heightOfRow(in:))) == false {
+        if dataSource?.responds(to: #selector(SwiftDropMenuListViewDataSource.heightOfRow(in:))) == false {
             return 30.0
         }
-        return self.dataSource?.heightOfRow?(in: self) ?? 30.0
+        return dataSource?.heightOfRow?(in: self) ?? 30.0
     }
     
 
@@ -528,4 +436,103 @@ extension SwiftDropMenuListView: UICollectionViewDelegateFlowLayout {
             self.hide()
         }
     }
+}
+
+/// 展示下拉菜单的视图，以填充整个屏幕显示
+private class SwiftDropMenuContentView: UIControl {
+     
+    /// 用做`contentView`的父视图，当做动画时，`contentView`向上移动时，超出其父视图部分会被裁切
+    lazy var masksView: UIView = {
+        let contentView = UIView(frame: self.bounds)
+        contentView.layer.masksToBounds = true
+        return contentView
+    }()
+    /// 背景视图
+    lazy var coverView: UIView = {
+        let coverView = UIView()
+        coverView.isUserInteractionEnabled = false
+        coverView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        return coverView
+    }()
+    /// 展示内容的视图
+    var contentView: UIView
+    
+    weak var masksViewTop: NSLayoutConstraint?
+    weak var coverViewTop: NSLayoutConstraint?
+    weak var masksViewHeight: NSLayoutConstraint?
+    weak var contentViewTop: NSLayoutConstraint?
+    
+    // 点击了不在contentView 上的坐标
+    var touchNotInContentBlock: ((_ point: CGPoint) -> Void)?
+    
+    init(contentView: UIView) {
+        self.contentView = contentView
+        super.init(frame: .zero)
+        commonInit()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        commonInit()
+    }
+    
+    private func commonInit() {
+        
+        self.backgroundColor = .clear
+        
+        addSubview(coverView)
+        coverView.translatesAutoresizingMaskIntoConstraints = false
+        let coverViewTop = coverView.topAnchor.constraint(equalTo: self.topAnchor)
+        coverViewTop.isActive = true
+        self.coverViewTop = coverViewTop
+        coverView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        coverView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+        coverView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        
+        addSubview(masksView)
+        masksView.translatesAutoresizingMaskIntoConstraints = false
+        masksView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        masksView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        let masksViewTop = masksView.topAnchor.constraint(equalTo: self.topAnchor)
+        masksViewTop.isActive = true
+        self.masksViewTop = masksViewTop
+        let contentHeight = masksView.heightAnchor.constraint(equalToConstant: 0.0)
+        contentHeight.isActive = true
+        self.masksViewHeight = contentHeight
+        
+        masksView.addSubview(contentView)
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        
+        contentView.leadingAnchor.constraint(equalTo: masksView.leadingAnchor).isActive = true
+        contentView.trailingAnchor.constraint(equalTo: masksView.trailingAnchor).isActive = true
+        let contentViewTop = contentView.topAnchor.constraint(equalTo: masksView.topAnchor)
+        contentViewTop.isActive = true
+        self.contentViewTop = contentViewTop
+        contentView.heightAnchor.constraint(equalTo: masksView.heightAnchor).isActive = true
+
+    }
+    
+    // 只有相对在coverView上的坐标才可以点击
+    func shouldTouchInCover(point: CGPoint) -> Bool {
+        return self.coverView.frame.contains(point) == true
+    }
+    
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let flag = shouldTouchInCover(point: point)
+        if flag == true {
+            return super.hitTest(point, with: event)
+        }
+        if let block = self.touchNotInContentBlock {
+            block(point)
+        }
+        return nil
+    }
+    
+//    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+//        return shouldTouch(point: point)
+//    }
 }
