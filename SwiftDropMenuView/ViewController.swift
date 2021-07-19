@@ -14,6 +14,8 @@ class ViewController: UIViewController {
     weak var dropMenu1: SwiftDropMenuListView?
     weak var dropMenu2: SwiftDropMenuListView?
     
+    var segmentView: ServicePointSegmentedView?
+    
     
     weak var ocMenuView: SwiftDropMenuListView?
     
@@ -73,7 +75,8 @@ class ViewController: UIViewController {
         segmentView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         segmentView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         segmentView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        
+        self.segmentView = segmentView
+        segmentView.nearbyBtn.delegate = self
     }
 
 
@@ -111,3 +114,10 @@ extension ViewController: SwiftDropMenuListViewDelegate {
 }
 
 
+extension ViewController: SwiftDropMenuControlDelegate {
+    func didHidden(forDropMenu menu: SwiftDropMenuControl) {
+        if segmentView?.selectedBtn == segmentView?.nearbyBtn {
+            segmentView?.selectedBtn = nil
+        }
+    }
+}
