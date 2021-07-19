@@ -51,7 +51,7 @@
 		D05791E02540209600D7F72F /* SwiftDropMenuViewUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftDropMenuViewUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05791E42540209600D7F72F /* SwiftDropMenuViewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDropMenuViewUITests.swift; sourceTree = "<group>"; };
 		D05791E62540209600D7F72F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D08535D726A46C070032F6B9 /* SwiftDropMenuControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftDropMenuControl.swift; sourceTree = "<group>"; };
+		D08535D726A46C070032F6B9 /* SwiftDropMenuControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 5; lastKnownFileType = sourcecode.swift; path = SwiftDropMenuControl.swift; sourceTree = "<group>"; };
 		D08535D926A46C490032F6B9 /* ServicePointSegmentedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServicePointSegmentedView.swift; sourceTree = "<group>"; };
 		D08535DA26A46C490032F6B9 /* NearbyFilterDropMenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NearbyFilterDropMenuView.swift; sourceTree = "<group>"; };
 		D08535DD26A46C6E0032F6B9 /* Then.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Then.swift; sourceTree = "<group>"; };

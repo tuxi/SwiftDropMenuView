@@ -38,6 +38,7 @@ class NearbyFilterDropMenuView: UIView {
         leftView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         leftView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         leftView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        leftView.heightAnchor.constraint(equalToConstant: 441).isActive = true
         
         rightView.leadingAnchor.constraint(equalTo: leftView.trailingAnchor).isActive = true
         rightView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
@@ -49,6 +50,7 @@ class NearbyFilterDropMenuView: UIView {
         rightView.dataSource = self
         leftView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         rightView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        
     }
 }
 
