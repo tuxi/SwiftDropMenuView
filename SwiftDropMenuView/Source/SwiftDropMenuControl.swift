@@ -115,7 +115,7 @@ open class SwiftDropMenuControl: UIButton {
     }
     
     public required init?(coder: NSCoder) {
-        self.listView = UIView() as! SwiftDropMenuControl.ListView
+        self.listView = UIView() as SwiftDropMenuControl.ListView
         super.init(coder: coder)
     }
     
