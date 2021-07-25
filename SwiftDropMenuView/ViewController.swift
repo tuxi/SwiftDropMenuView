@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     weak var dropMenu1: SwiftDropMenuListView?
     weak var dropMenu2: SwiftDropMenuListView?
     
-    var segmentView: ServicePointSegmentedView?
+    var segmentView: SegmentedView?
     
     
     weak var ocMenuView: SwiftDropMenuListView?
@@ -54,7 +54,7 @@ class ViewController: UIViewController {
         
         
         let ocMenuView = SwiftDropMenuListView(frame: .zero)
-        ocMenuView.setTitle("点我", for: .normal)
+        ocMenuView.setTitle("menu", for: .normal)
         self.view.addSubview(ocMenuView)
         ocMenuView.delegate = self
         ocMenuView.dataSource = self
@@ -67,8 +67,39 @@ class ViewController: UIViewController {
         ocMenuView.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
         ocMenuView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.6).isActive = true
         
+        func createMenuListView() {
+            let menuView = SwiftDropMenuListView(frame: .zero)
+            menuView.setTitle("menu", for: .normal)
+            self.view.addSubview(menuView)
+            menuView.delegate = self
+            menuView.dataSource = self
+            menuView.backgroundColor = UIColor.orange
+            menuView.translatesAutoresizingMaskIntoConstraints = false
+            menuView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: 60.0).isActive = true
+            menuView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+            menuView.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
+            menuView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.6).isActive = true
+        }
+
+        func createMenuControl() {
+            /// 使用`frame`方式
+            let menuControl = SwiftDropMenuControl(frame: CGRect(x: 100, y: 280, width: 120, height: 44), listView: MapFilterDropMenuListView())
+            menuControl.setTitle("自定义菜单", for: .normal)
+            menuControl.setTitleColor(.gray, for: .normal)
+            menuControl.setTitleColor(.gray, for: .normal)
+            menuControl.setTitleColor(.red, for: .selected)
+            menuControl.setImage(UIImage(named: "icon_sort_arrow_down_1"), for: .normal)
+            menuControl.setImage(UIImage(named: "icon_sort_arrow_up_1"), for: .selected)
+            menuControl.contentHorizontalAlignment = .right
+            menuControl.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 50)
+            menuControl.animateDuration = 0.1
+            menuControl.delegate = self
+            menuControl.sizeToFit()
+            self.view.addSubview(menuControl)
+        }
+        
         /// 自定义`listView`
-        let segmentView = ServicePointSegmentedView()
+        let segmentView = SegmentedView()
         view.addSubview(segmentView)
         segmentView.translatesAutoresizingMaskIntoConstraints = false
         segmentView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -78,8 +109,6 @@ class ViewController: UIViewController {
         self.segmentView = segmentView
         segmentView.nearbyBtn.delegate = self
     }
-
-
 }
 
 extension ViewController: SwiftDropMenuListViewDataSource {
@@ -113,11 +142,20 @@ extension ViewController: SwiftDropMenuListViewDelegate {
     }
 }
 
-
-extension ViewController: SwiftDropMenuControlDelegate {
-    func didHidden(forDropMenu menu: SwiftDropMenuControl) {
-        if segmentView?.selectedBtn == segmentView?.nearbyBtn {
-            segmentView?.selectedBtn = nil
+extension ViewController: SwiftDropMenuControlContentAppearable {
+    func on(appear element: SwiftDropMenuControl.AppearElement, forDropMenu menu: SwiftDropMenuControl) {
+        switch element {
+        case .willDisplay:
+            print("willDisplay")
+        case .didDisplay:
+            print("didDisplay")
+        case .willHidden:
+            print("willHidden")
+        case .didHidden:
+            print("didHidden")
+            if segmentView?.selectedBtn == segmentView?.nearbyBtn {
+                segmentView?.selectedBtn = nil
+            }
         }
     }
 }

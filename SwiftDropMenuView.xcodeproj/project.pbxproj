@@ -12,30 +12,11 @@
 		D05791CA2540209400D7F72F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D05791C82540209400D7F72F /* Main.storyboard */; };
 		D05791CC2540209600D7F72F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D05791CB2540209600D7F72F /* Assets.xcassets */; };
 		D05791CF2540209600D7F72F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D05791CD2540209600D7F72F /* LaunchScreen.storyboard */; };
-		D05791DA2540209600D7F72F /* SwiftDropMenuViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05791D92540209600D7F72F /* SwiftDropMenuViewTests.swift */; };
-		D05791E52540209600D7F72F /* SwiftDropMenuViewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05791E42540209600D7F72F /* SwiftDropMenuViewUITests.swift */; };
 		D08535D826A46C070032F6B9 /* SwiftDropMenuControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08535D726A46C070032F6B9 /* SwiftDropMenuControl.swift */; };
-		D08535DB26A46C490032F6B9 /* ServicePointSegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08535D926A46C490032F6B9 /* ServicePointSegmentedView.swift */; };
-		D08535DC26A46C490032F6B9 /* NearbyFilterDropMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08535DA26A46C490032F6B9 /* NearbyFilterDropMenuView.swift */; };
+		D08535DB26A46C490032F6B9 /* SegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08535D926A46C490032F6B9 /* SegmentedView.swift */; };
+		D08535DC26A46C490032F6B9 /* MapFilterDropMenuListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08535DA26A46C490032F6B9 /* MapFilterDropMenuListView.swift */; };
 		D08535DE26A46C6E0032F6B9 /* Then.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08535DD26A46C6E0032F6B9 /* Then.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		D05791D62540209600D7F72F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D05791B72540209400D7F72F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D05791BE2540209400D7F72F;
-			remoteInfo = SwiftDropMenuView;
-		};
-		D05791E12540209600D7F72F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D05791B72540209400D7F72F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D05791BE2540209400D7F72F;
-			remoteInfo = SwiftDropMenuView;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		D05791BF2540209400D7F72F /* SwiftDropMenuView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftDropMenuView.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -45,34 +26,14 @@
 		D05791CB2540209600D7F72F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D05791CE2540209600D7F72F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D05791D02540209600D7F72F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D05791D52540209600D7F72F /* SwiftDropMenuViewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftDropMenuViewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D05791D92540209600D7F72F /* SwiftDropMenuViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDropMenuViewTests.swift; sourceTree = "<group>"; };
-		D05791DB2540209600D7F72F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D05791E02540209600D7F72F /* SwiftDropMenuViewUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftDropMenuViewUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D05791E42540209600D7F72F /* SwiftDropMenuViewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDropMenuViewUITests.swift; sourceTree = "<group>"; };
-		D05791E62540209600D7F72F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D08535D726A46C070032F6B9 /* SwiftDropMenuControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 5; lastKnownFileType = sourcecode.swift; path = SwiftDropMenuControl.swift; sourceTree = "<group>"; };
-		D08535D926A46C490032F6B9 /* ServicePointSegmentedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServicePointSegmentedView.swift; sourceTree = "<group>"; };
-		D08535DA26A46C490032F6B9 /* NearbyFilterDropMenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NearbyFilterDropMenuView.swift; sourceTree = "<group>"; };
+		D08535D926A46C490032F6B9 /* SegmentedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentedView.swift; sourceTree = "<group>"; };
+		D08535DA26A46C490032F6B9 /* MapFilterDropMenuListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapFilterDropMenuListView.swift; sourceTree = "<group>"; };
 		D08535DD26A46C6E0032F6B9 /* Then.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Then.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		D05791BC2540209400D7F72F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D05791D22540209600D7F72F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D05791DD2540209600D7F72F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -86,8 +47,6 @@
 			isa = PBXGroup;
 			children = (
 				D05791C12540209400D7F72F /* SwiftDropMenuView */,
-				D05791D82540209600D7F72F /* SwiftDropMenuViewTests */,
-				D05791E32540209600D7F72F /* SwiftDropMenuViewUITests */,
 				D05791C02540209400D7F72F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -96,8 +55,6 @@
 			isa = PBXGroup;
 			children = (
 				D05791BF2540209400D7F72F /* SwiftDropMenuView.app */,
-				D05791D52540209600D7F72F /* SwiftDropMenuViewTests.xctest */,
-				D05791E02540209600D7F72F /* SwiftDropMenuViewUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -110,31 +67,13 @@
 				D05791C62540209400D7F72F /* ViewController.swift */,
 				D05791C82540209400D7F72F /* Main.storyboard */,
 				D05791CB2540209600D7F72F /* Assets.xcassets */,
-				D08535DA26A46C490032F6B9 /* NearbyFilterDropMenuView.swift */,
-				D08535D926A46C490032F6B9 /* ServicePointSegmentedView.swift */,
+				D08535DA26A46C490032F6B9 /* MapFilterDropMenuListView.swift */,
+				D08535D926A46C490032F6B9 /* SegmentedView.swift */,
 				D05791CD2540209600D7F72F /* LaunchScreen.storyboard */,
 				D08535DD26A46C6E0032F6B9 /* Then.swift */,
 				D05791D02540209600D7F72F /* Info.plist */,
 			);
 			path = SwiftDropMenuView;
-			sourceTree = "<group>";
-		};
-		D05791D82540209600D7F72F /* SwiftDropMenuViewTests */ = {
-			isa = PBXGroup;
-			children = (
-				D05791D92540209600D7F72F /* SwiftDropMenuViewTests.swift */,
-				D05791DB2540209600D7F72F /* Info.plist */,
-			);
-			path = SwiftDropMenuViewTests;
-			sourceTree = "<group>";
-		};
-		D05791E32540209600D7F72F /* SwiftDropMenuViewUITests */ = {
-			isa = PBXGroup;
-			children = (
-				D05791E42540209600D7F72F /* SwiftDropMenuViewUITests.swift */,
-				D05791E62540209600D7F72F /* Info.plist */,
-			);
-			path = SwiftDropMenuViewUITests;
 			sourceTree = "<group>";
 		};
 		D08535D626A46C070032F6B9 /* Source */ = {
@@ -165,42 +104,6 @@
 			productReference = D05791BF2540209400D7F72F /* SwiftDropMenuView.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D05791D42540209600D7F72F /* SwiftDropMenuViewTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D05791EC2540209600D7F72F /* Build configuration list for PBXNativeTarget "SwiftDropMenuViewTests" */;
-			buildPhases = (
-				D05791D12540209600D7F72F /* Sources */,
-				D05791D22540209600D7F72F /* Frameworks */,
-				D05791D32540209600D7F72F /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				D05791D72540209600D7F72F /* PBXTargetDependency */,
-			);
-			name = SwiftDropMenuViewTests;
-			productName = SwiftDropMenuViewTests;
-			productReference = D05791D52540209600D7F72F /* SwiftDropMenuViewTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		D05791DF2540209600D7F72F /* SwiftDropMenuViewUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D05791EF2540209600D7F72F /* Build configuration list for PBXNativeTarget "SwiftDropMenuViewUITests" */;
-			buildPhases = (
-				D05791DC2540209600D7F72F /* Sources */,
-				D05791DD2540209600D7F72F /* Frameworks */,
-				D05791DE2540209600D7F72F /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				D05791E22540209600D7F72F /* PBXTargetDependency */,
-			);
-			name = SwiftDropMenuViewUITests;
-			productName = SwiftDropMenuViewUITests;
-			productReference = D05791E02540209600D7F72F /* SwiftDropMenuViewUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -213,14 +116,6 @@
 					D05791BE2540209400D7F72F = {
 						CreatedOnToolsVersion = 12.0.1;
 						LastSwiftMigration = 1200;
-					};
-					D05791D42540209600D7F72F = {
-						CreatedOnToolsVersion = 12.0.1;
-						TestTargetID = D05791BE2540209400D7F72F;
-					};
-					D05791DF2540209600D7F72F = {
-						CreatedOnToolsVersion = 12.0.1;
-						TestTargetID = D05791BE2540209400D7F72F;
 					};
 				};
 			};
@@ -238,8 +133,6 @@
 			projectRoot = "";
 			targets = (
 				D05791BE2540209400D7F72F /* SwiftDropMenuView */,
-				D05791D42540209600D7F72F /* SwiftDropMenuViewTests */,
-				D05791DF2540209600D7F72F /* SwiftDropMenuViewUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -255,20 +148,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D05791D32540209600D7F72F /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D05791DE2540209600D7F72F /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -276,45 +155,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D08535DB26A46C490032F6B9 /* ServicePointSegmentedView.swift in Sources */,
+				D08535DB26A46C490032F6B9 /* SegmentedView.swift in Sources */,
 				D05791C72540209400D7F72F /* ViewController.swift in Sources */,
 				D05791C32540209400D7F72F /* AppDelegate.swift in Sources */,
-				D08535DC26A46C490032F6B9 /* NearbyFilterDropMenuView.swift in Sources */,
+				D08535DC26A46C490032F6B9 /* MapFilterDropMenuListView.swift in Sources */,
 				D08535DE26A46C6E0032F6B9 /* Then.swift in Sources */,
 				D08535D826A46C070032F6B9 /* SwiftDropMenuControl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D05791D12540209600D7F72F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D05791DA2540209600D7F72F /* SwiftDropMenuViewTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D05791DC2540209600D7F72F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D05791E52540209600D7F72F /* SwiftDropMenuViewUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		D05791D72540209600D7F72F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D05791BE2540209400D7F72F /* SwiftDropMenuView */;
-			targetProxy = D05791D62540209600D7F72F /* PBXContainerItemProxy */;
-		};
-		D05791E22540209600D7F72F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D05791BE2540209400D7F72F /* SwiftDropMenuView */;
-			targetProxy = D05791E12540209600D7F72F /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		D05791C82540209400D7F72F /* Main.storyboard */ = {
@@ -497,90 +347,6 @@
 			};
 			name = Release;
 		};
-		D05791ED2540209600D7F72F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = NKW67GFDHM;
-				INFOPLIST_FILE = SwiftDropMenuViewTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.enba.SwiftDropMenuViewTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftDropMenuView.app/SwiftDropMenuView";
-			};
-			name = Debug;
-		};
-		D05791EE2540209600D7F72F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = NKW67GFDHM;
-				INFOPLIST_FILE = SwiftDropMenuViewTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.enba.SwiftDropMenuViewTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftDropMenuView.app/SwiftDropMenuView";
-			};
-			name = Release;
-		};
-		D05791F02540209600D7F72F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = NKW67GFDHM;
-				INFOPLIST_FILE = SwiftDropMenuViewUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.enba.SwiftDropMenuViewUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = SwiftDropMenuView;
-			};
-			name = Debug;
-		};
-		D05791F12540209600D7F72F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = NKW67GFDHM;
-				INFOPLIST_FILE = SwiftDropMenuViewUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.enba.SwiftDropMenuViewUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = SwiftDropMenuView;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -598,24 +364,6 @@
 			buildConfigurations = (
 				D05791EA2540209600D7F72F /* Debug */,
 				D05791EB2540209600D7F72F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		D05791EC2540209600D7F72F /* Build configuration list for PBXNativeTarget "SwiftDropMenuViewTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D05791ED2540209600D7F72F /* Debug */,
-				D05791EE2540209600D7F72F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		D05791EF2540209600D7F72F /* Build configuration list for PBXNativeTarget "SwiftDropMenuViewUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D05791F02540209600D7F72F /* Debug */,
-				D05791F12540209600D7F72F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
