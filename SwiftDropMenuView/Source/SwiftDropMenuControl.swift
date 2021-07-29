@@ -9,7 +9,7 @@
 import UIKit
 
 /// 反内容馈显示或消失的回调
-public protocol SwiftDropMenuControlContentAppearable {
+public protocol SwiftDropMenuControlContentAppearable: SwiftDropMenuControlDelegate {
      
      func on(appear element: SwiftDropMenuControl.AppearElement, forDropMenu menu: SwiftDropMenuControl)
 }
@@ -45,7 +45,7 @@ public protocol SwiftDropMenuControlContentAppearable {
 open class SwiftDropMenuControl: UIButton {
      
      public typealias ListView = UIView & SwiftDropMenuControlContentAppearable
-     public typealias Delegate = SwiftDropMenuControlDelegate & SwiftDropMenuControlContentAppearable
+     public typealias Delegate = SwiftDropMenuControlDelegate
      
      public enum AppearElement {
           /// 即将展开下拉列表
@@ -244,22 +244,22 @@ open class SwiftDropMenuControl: UIButton {
      // MARK: - Appear Callback
      /// 即将显示下拉列表
      private func willDisplay() {
-          delegate?.on(appear: .willDisplay, forDropMenu: self)
+          (delegate as? SwiftDropMenuControlContentAppearable)?.on(appear: .willDisplay, forDropMenu: self)
           listView.on(appear: .willDisplay, forDropMenu: self)
      }
      /// 已经显示下拉列表
      private func didDisplay() {
-          delegate?.on(appear: .didDisplay, forDropMenu: self)
+          (delegate as? SwiftDropMenuControlContentAppearable)?.on(appear: .didDisplay, forDropMenu: self)
           listView.on(appear: .didDisplay, forDropMenu: self)
      }
      /// 即将隐藏下拉列表
      private func willHidden() {
-          delegate?.on(appear: .willHidden, forDropMenu: self)
+          (delegate as? SwiftDropMenuControlContentAppearable)?.on(appear: .willHidden, forDropMenu: self)
           listView.on(appear: .willHidden, forDropMenu: self)
      }
      /// 已经隐藏下拉列表
      private func didHidden() {
-          delegate?.on(appear: .didHidden, forDropMenu: self)
+          (delegate as? SwiftDropMenuControlContentAppearable)?.on(appear: .didHidden, forDropMenu: self)
           listView.on(appear: .didHidden, forDropMenu: self)
      }
 }

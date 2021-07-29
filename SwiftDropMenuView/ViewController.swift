@@ -142,20 +142,20 @@ extension ViewController: SwiftDropMenuListViewDelegate {
     }
 }
 
-extension ViewController: SwiftDropMenuControlContentAppearable {
-    func on(appear element: SwiftDropMenuControl.AppearElement, forDropMenu menu: SwiftDropMenuControl) {
-        switch element {
-        case .willDisplay:
-            print("willDisplay")
-        case .didDisplay:
-            print("didDisplay")
-        case .willHidden:
-            print("willHidden")
-        case .didHidden:
-            print("didHidden")
-            if segmentView?.selectedBtn == segmentView?.nearbyBtn {
-                segmentView?.selectedBtn = nil
-            }
-        }
-    }
-}
+//extension ViewController: SwiftDropMenuControlContentAppearable {
+//    func on(appear element: SwiftDropMenuControl.AppearElement, forDropMenu menu: SwiftDropMenuControl) {
+//        switch element {
+//        case .willDisplay:
+//            print("willDisplay")
+//        case .didDisplay:
+//            print("didDisplay")
+//        case .willHidden:
+//            print("willHidden")
+//        case .didHidden:
+//            print("didHidden")
+//            if segmentView?.selectedBtn == segmentView?.nearbyBtn {
+//                segmentView?.selectedBtn = nil
+//            }
+//        }
+//    }
+//}
